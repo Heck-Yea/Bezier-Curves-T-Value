@@ -1,1 +1,2 @@
 sketch1.js  ->  t-value visualization
+sketch2.js  ->  velocity/acceleration visualization

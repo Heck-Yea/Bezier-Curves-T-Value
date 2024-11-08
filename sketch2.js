@@ -4,16 +4,15 @@ let draggingP0 = false,
     draggingP2 = false,
     draggingP3 = false;
 let offsetX, offsetY;
-let slider;
 
 function setup() {
   createCanvas(1000, 1000);
   strokeWeight(20);
 
-  p0 = createVector(10, 50);
-  p1 = createVector(30, 20);
-  p2 = createVector(60, 25);
-  p3 = createVector(80, 70);
+  p0 = createVector(-100, 75);
+  p1 = createVector(-110, -120);
+  p2 = createVector(170, -55);
+  p3 = createVector(140, 90);
 
   // Slider that controls T
   slider = createSlider(0, 1, 0, 0.01);
@@ -24,7 +23,7 @@ function draw() {
   background(0);
   stroke(255);
   strokeWeight(20);
-  translate(400,400);
+  translate(400, 400);
 
   // Calculate lerped points for current t-value
   let t = slider.value();
@@ -44,43 +43,17 @@ function draw() {
   line(p0.x, p0.y, p1.x, p1.y);
   line(p1.x, p1.y, p2.x, p2.y);
   line(p2.x, p2.y, p3.x, p3.y);
-  line(v01.x, v01.y, v02.x, v02.y);
-  line(v02.x, v02.y, v03.x, v03.y);
-  line(v11.x, v11.y, v12.x, v12.y);
 
   // Draw bezier curve
   strokeWeight(4);
   stroke(255);
   beginShape();
   noFill();
-  for (let t = 0; t <= 1; t += 0.01) {
+  for (let t = 0; t <= 1; t += 0.001) {
     let v = cubicBezier(p0, p1, p2, p3, t);
     vertex(v.x, v.y);
   }
   endShape();
-
-  // Draw first derivative (velocity)
-  stroke(255, 0, 0); // red for velocity
-  beginShape();
-  noFill();
-  for (let t = 0; t <= 1; t += 0.01) {
-    let v_prime = firstDerivative(p0, p1, p2, p3, t);
-    vertex(v_prime.x, v_prime.y);
-  }
-  endShape();
-
-  // Draw second derivative (acceleration)
-  stroke(0, 0, 255); // blue for acceleration
-  beginShape();
-  noFill();
-  for (let t = 0; t <= 1; t += 0.01) {
-    let v_double_prime = secondDerivative(p0, p1, p2, p3, t);
-    vertex(v_double_prime.x, v_double_prime.y);
-  }
-  endShape();
-
-  // Draw lerped points
-  drawLerpedPoints(v01, v02, v03, v11, v12, v21);
 
   // Draw control points
   drawPoint(p0);
@@ -93,13 +66,66 @@ function draw() {
   fill(255);
   textSize(25);
   textAlign(LEFT, TOP);
-  text(`p0: < ${p0.x.toFixed(2)}, ${p0.y.toFixed(2)} >`, width - 700, -380);
-  text(`p1: < ${p1.x.toFixed(2)}, ${p1.y.toFixed(2)} >`, width - 700, -350);
-  text(`p2: < ${p2.x.toFixed(2)}, ${p2.y.toFixed(2)} >`, width - 700, -320);
-  text(`p3: < ${p3.x.toFixed(2)}, ${p3.y.toFixed(2)} >`, width - 700, -290);
-  text(`t-value: ${t}`, width - 700, -260);
-  text(`velocity: < ${v_prime.x.toFixed(2)}, ${v_prime.y.toFixed(2)} >`, width - 700, -230);
-  text(`acceleration: < ${v_double_prime.x.toFixed(2)}, ${v_double_prime.y.toFixed(2)} >`, width - 700, -200);
+  text(`p0: < ${p0.x.toFixed(2)}, ${p0.y.toFixed(2)} >`, width - 800, -380);
+  text(`p1: < ${p1.x.toFixed(2)}, ${p1.y.toFixed(2)} >`, width - 800, -350);
+  text(`p2: < ${p2.x.toFixed(2)}, ${p2.y.toFixed(2)} >`, width - 800, -320);
+  text(`p3: < ${p3.x.toFixed(2)}, ${p3.y.toFixed(2)} >`, width - 800, -290);
+  text(`t-value: ${t}`, width - 800, -260);
+  text(
+    `velocity: < ${v_prime.x.toFixed(2)}, ${v_prime.y.toFixed(2)} >`,
+    width - 800,
+    -230
+  );
+  text(
+    `acceleration: < ${v_double_prime.x.toFixed(2)}, ${v_double_prime.y.toFixed(
+      2
+    )} >`,
+    width - 800,
+    -200
+  );
+
+  // Draw first derivative (red) and related
+  translate(350,350);
+  strokeWeight(3);
+  stroke(255, 0, 0);
+  beginShape();
+  noFill();
+  for (let t = 0; t <= 1; t += 0.001) {
+    let v_prime = firstDerivative(p0, p1, p2, p3, t);
+    vertex(v_prime.x, v_prime.y);
+  }
+  endShape();
+  stroke(255);
+  line(-200, 0, 200, 0);
+  line(0, -200, 0, 200);
+  stroke(255, 100, 100);
+  drawArrow(0, 0, v_prime.x, v_prime.y)
+
+  // Draw second derivative (blue)
+  translate(-600,0);
+  strokeWeight(3);
+  stroke(0, 0, 255);
+  beginShape();
+  noFill();
+  for (let t = 0; t <= 1; t += 0.001) {
+    let v_double_prime = secondDerivative(p0, p1, p2, p3, t);
+    vertex(v_double_prime.x, v_double_prime.y);
+  }
+  endShape();
+  stroke(255);
+  line(-100, 0, 100, 0);
+  line(0, -100, 0, 100);
+  stroke(100, 100, 255);
+  drawArrow(0, 0, v_double_prime.x, v_double_prime.y)
+
+  // Draw velocity/acceleration on the bezier curve
+  translate(250, -350)
+  stroke(255, 100, 100);
+  drawArrow(v21.x, v21.y, v21.x + v_prime.x, v21.y + v_prime.y);
+  stroke(100, 100, 255);
+  drawArrow(v21.x, v21.y, v21.x + v_double_prime.x, v21.y + v_double_prime.y)
+
+
 }
 
 function drawPoint(p) {
@@ -108,19 +134,21 @@ function drawPoint(p) {
   point(p.x, p.y);
 }
 
-// Draw lerped points on the lines for a given T value
-function drawLerpedPoints(v01, v02, v03, v11, v12, v21) {
-  noStroke();
-  fill(0, 255, 0); // green
-  ellipse(v01.x, v01.y, 15, 15); // p0 -> p1
-  ellipse(v02.x, v02.y, 15, 15); // p1 -> p2
-  ellipse(v03.x, v03.y, 15, 15); // p2 -> p3
-  fill(255, 0, 0); // red
-  ellipse(v11.x, v11.y, 15, 15); // p0 -> p1 -> p2
-  ellipse(v12.x, v12.y, 15, 15); // p1 -> p2 -> p3
-  fill(50, 50, 255); // blue
-  ellipse(v21.x, v21.y, 15, 15); // final
-}
+function drawArrow(x1, y1, x2, y2) {
+    line(x1, y1, x2, y2);
+
+    let angle = atan2(y2 - y1, x2 - x1);
+
+    let arrowSize = 10;
+    let arrowX = x2;
+    let arrowY = y2;
+
+    push();
+    translate(arrowX, arrowY);
+    rotate(angle - PI / 2);
+    triangle(0, 0, arrowSize / 2, -arrowSize, -arrowSize / 2, -arrowSize);
+    pop();
+  }
 
 // cubic function call
 function cubicBezier(p0, p1, p2, p3, t) {
@@ -140,36 +168,36 @@ function firstDerivative(p0, p1, p2, p3, t) {
   let v03 = p5.Vector.lerp(p2, p3, t);
   let v11 = p5.Vector.lerp(v01, v02, t);
   let v12 = p5.Vector.lerp(v02, v03, t);
-  return p5.Vector.sub(v12, v11).mult(1.5);
+  return p5.Vector.sub(v12, v11);
 }
 
 // Second derivative
 function secondDerivative(p0, p1, p2, p3, t) {
   let firstDerivative1 = firstDerivative(p0, p1, p2, p3, t);
   let firstDerivative2 = firstDerivative(p0, p1, p2, p3, t + 0.001);
-  let secondDerivative = p5.Vector.sub(firstDerivative2, firstDerivative1).mult(50);
+  let secondDerivative = p5.Vector.sub(firstDerivative2, firstDerivative1).mult(100);
 
   return secondDerivative;
 }
 
 // Mouse is pressed
 function mousePressed() {
-  if (dist(mouseX, mouseY, p0.x+400, p0.y+400) < 20) {
+  if (dist(mouseX, mouseY, p0.x + 400, p0.y + 400) < 20) {
     draggingP0 = true;
     offsetX = mouseX - p0.x;
     offsetY = mouseY - p0.y;
   }
-  if (dist(mouseX, mouseY, p1.x+400, p1.y+400) < 20) {
+  if (dist(mouseX, mouseY, p1.x + 400, p1.y + 400) < 20) {
     draggingP1 = true;
     offsetX = mouseX - p1.x;
     offsetY = mouseY - p1.y;
   }
-  if (dist(mouseX, mouseY, p2.x+400, p2.y+400) < 20) {
+  if (dist(mouseX, mouseY, p2.x + 400, p2.y + 400) < 20) {
     draggingP2 = true;
     offsetX = mouseX - p2.x;
     offsetY = mouseY - p2.y;
   }
-  if (dist(mouseX, mouseY, p3.x+400, p3.y+400) < 20) {
+  if (dist(mouseX, mouseY, p3.x + 400, p3.y + 400) < 20) {
     draggingP3 = true;
     offsetX = mouseX - p3.x;
     offsetY = mouseY - p3.y;
