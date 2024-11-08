@@ -108,22 +108,22 @@ function cubicBezier(p0, p1, p2, p3, t) {
 
 // Mouse is pressed
 function mousePressed() {
-  if (dist(mouseX, mouseY, p0.x+400, p0.y+400) < 20) {
+  if (dist(mouseX, mouseY, p0.x, p0.y) < 20) {
     draggingP0 = true;
     offsetX = mouseX - p0.x;
     offsetY = mouseY - p0.y;
   }
-  if (dist(mouseX, mouseY, p1.x+400, p1.y+400) < 20) {
+  if (dist(mouseX, mouseY, p1.x, p1.y) < 20) {
     draggingP1 = true;
     offsetX = mouseX - p1.x;
     offsetY = mouseY - p1.y;
   }
-  if (dist(mouseX, mouseY, p2.x+400, p2.y+400) < 20) {
+  if (dist(mouseX, mouseY, p2.x, p2.y) < 20) {
     draggingP2 = true;
     offsetX = mouseX - p2.x;
     offsetY = mouseY - p2.y;
   }
-  if (dist(mouseX, mouseY, p3.x+400, p3.y+400) < 20) {
+  if (dist(mouseX, mouseY, p3.x, p3.y) < 20) {
     draggingP3 = true;
     offsetX = mouseX - p3.x;
     offsetY = mouseY - p3.y;
