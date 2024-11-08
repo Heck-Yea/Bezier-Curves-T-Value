@@ -10,10 +10,10 @@ function setup() {
   createCanvas(1000, 1000);
   strokeWeight(20);
 
-  p0 = createVector(10, 50);
-  p1 = createVector(30, 20);
-  p2 = createVector(60, 25);
-  p3 = createVector(80, 70);
+  p0 = createVector(100, 500);
+  p1 = createVector(300, 200);
+  p2 = createVector(600, 250);
+  p3 = createVector(800, 700);
 
   // Slider that controls T
   slider = createSlider(0, 1, 0, 0.01);
@@ -23,8 +23,7 @@ function setup() {
 function draw() {
   background(0);
   stroke(255);
-  strokeWeight(20);
-  translate(400,400);
+  strokeWeight(20);300
 
   // Calculate lerped points for current t-value
   let t = slider.value();
@@ -34,10 +33,6 @@ function draw() {
   let v11 = p5.Vector.lerp(v01, v02, t);
   let v12 = p5.Vector.lerp(v02, v03, t);
   let v21 = p5.Vector.lerp(v11, v12, t);
-
-  // Calculate derivatives
-  let v_prime = firstDerivative(p0, p1, p2, p3, t);
-  let v_double_prime = secondDerivative(p0, p1, p2, p3, t);
 
   // Draw structure lines
   strokeWeight(1);
@@ -59,26 +54,6 @@ function draw() {
   }
   endShape();
 
-  // Draw first derivative (velocity)
-  stroke(255, 0, 0); // red for velocity
-  beginShape();
-  noFill();
-  for (let t = 0; t <= 1; t += 0.01) {
-    let v_prime = firstDerivative(p0, p1, p2, p3, t);
-    vertex(v_prime.x, v_prime.y);
-  }
-  endShape();
-
-  // Draw second derivative (acceleration)
-  stroke(0, 0, 255); // blue for acceleration
-  beginShape();
-  noFill();
-  for (let t = 0; t <= 1; t += 0.01) {
-    let v_double_prime = secondDerivative(p0, p1, p2, p3, t);
-    vertex(v_double_prime.x, v_double_prime.y);
-  }
-  endShape();
-
   // Draw lerped points
   drawLerpedPoints(v01, v02, v03, v11, v12, v21);
 
@@ -93,13 +68,11 @@ function draw() {
   fill(255);
   textSize(25);
   textAlign(LEFT, TOP);
-  text(`p0: < ${p0.x.toFixed(2)}, ${p0.y.toFixed(2)} >`, width - 700, -380);
-  text(`p1: < ${p1.x.toFixed(2)}, ${p1.y.toFixed(2)} >`, width - 700, -350);
-  text(`p2: < ${p2.x.toFixed(2)}, ${p2.y.toFixed(2)} >`, width - 700, -320);
-  text(`p3: < ${p3.x.toFixed(2)}, ${p3.y.toFixed(2)} >`, width - 700, -290);
-  text(`t-value: ${t}`, width - 700, -260);
-  text(`velocity: < ${v_prime.x.toFixed(2)}, ${v_prime.y.toFixed(2)} >`, width - 700, -230);
-  text(`acceleration: < ${v_double_prime.x.toFixed(2)}, ${v_double_prime.y.toFixed(2)} >`, width - 700, -200);
+  text(`p0: < ${p0.x.toFixed(2)}, ${p0.y.toFixed(2)} >`, width - 300, 20);
+  text(`p1: < ${p1.x.toFixed(2)}, ${p1.y.toFixed(2)} >`, width - 300, 50);
+  text(`p2: < ${p2.x.toFixed(2)}, ${p2.y.toFixed(2)} >`, width - 300, 80);
+  text(`p3: < ${p3.x.toFixed(2)}, ${p3.y.toFixed(2)} >`, width - 300, 110);
+  text(`t-value: ${t}`, width - 300, 140);
 }
 
 function drawPoint(p) {
@@ -131,25 +104,6 @@ function cubicBezier(p0, p1, p2, p3, t) {
   let v12 = p5.Vector.lerp(v02, v03, t);
   let v21 = p5.Vector.lerp(v11, v12, t);
   return v21;
-}
-
-// First derivative
-function firstDerivative(p0, p1, p2, p3, t) {
-  let v01 = p5.Vector.lerp(p0, p1, t);
-  let v02 = p5.Vector.lerp(p1, p2, t);
-  let v03 = p5.Vector.lerp(p2, p3, t);
-  let v11 = p5.Vector.lerp(v01, v02, t);
-  let v12 = p5.Vector.lerp(v02, v03, t);
-  return p5.Vector.sub(v12, v11).mult(1.5);
-}
-
-// Second derivative
-function secondDerivative(p0, p1, p2, p3, t) {
-  let firstDerivative1 = firstDerivative(p0, p1, p2, p3, t);
-  let firstDerivative2 = firstDerivative(p0, p1, p2, p3, t + 0.001);
-  let secondDerivative = p5.Vector.sub(firstDerivative2, firstDerivative1).mult(50);
-
-  return secondDerivative;
 }
 
 // Mouse is pressed
