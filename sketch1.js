@@ -23,7 +23,7 @@ function setup() {
 function draw() {
   background(0);
   stroke(255);
-  strokeWeight(20);300
+  strokeWeight(20);
 
   // Calculate lerped points for current t-value
   let t = slider.value();
@@ -72,7 +72,7 @@ function draw() {
   text(`p1: < ${p1.x.toFixed(2)}, ${p1.y.toFixed(2)} >`, width - 300, 50);
   text(`p2: < ${p2.x.toFixed(2)}, ${p2.y.toFixed(2)} >`, width - 300, 80);
   text(`p3: < ${p3.x.toFixed(2)}, ${p3.y.toFixed(2)} >`, width - 300, 110);
-  text(`t-value: ${t}`, width - 300, 140);
+  text(`t-value: ${t.toFixed(2)}`, width - 300, 140);
 }
 
 function drawPoint(p) {
