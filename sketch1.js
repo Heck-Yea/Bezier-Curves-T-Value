@@ -67,11 +67,12 @@ function draw() {
   strokeWeight(0.7);
   fill(255);
   textSize(16);
-  textAlign(LEFT, TOP);
+  textAlign(RIGHT, TOP);
   text(`p0: < ${p0.x.toFixed(2)}, ${p0.y.toFixed(2)} >`, width - 20, 20);
   text(`p1: < ${p1.x.toFixed(2)}, ${p1.y.toFixed(2)} >`, width - 20, 40);
   text(`p2: < ${p2.x.toFixed(2)}, ${p2.y.toFixed(2)} >`, width - 20, 60);
   text(`p3: < ${p3.x.toFixed(2)}, ${p3.y.toFixed(2)} >`, width - 20, 80);
+  text(`t-value: ${t}`, width - 20, 100);
 }
 
 function drawPoint(p) {
