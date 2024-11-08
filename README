@@ -1,3 +1,6 @@
 in VSCode, open index.html and right-click, then open LiveServer. If you don't have the LiveServer extension, you need to download that.
 
 If you want to use this in the p5.js browser editor, copy and paste the code from sketch.js
+
+ONLY PUSH COMMITS TO NEXT-UPDATE. When you are ready, make a pull request and I can check it out
+  because I don't trust you monkeys to not crash the web app.
