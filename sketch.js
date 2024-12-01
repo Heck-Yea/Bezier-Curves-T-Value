@@ -17,7 +17,7 @@ function setup() {
 
   // Slider that controls T
   slider = createSlider(0, 1, 0, 0.01);
-  slider.position(20, height - 30);
+  slider.position(20, 30);
 }
 
 function draw() {
